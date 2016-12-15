@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NaumenPenalty", "NaumenPenalty\NaumenPenalty.csproj", "{DAC9001D-6031-464C-9091-64964F284E29}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReportDownload", "ReportDownload\ReportDownload.csproj", "{FE8C2F86-2A28-486B-8A47-FA04814E502B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{DAC9001D-6031-464C-9091-64964F284E29}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DAC9001D-6031-464C-9091-64964F284E29}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DAC9001D-6031-464C-9091-64964F284E29}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FE8C2F86-2A28-486B-8A47-FA04814E502B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE8C2F86-2A28-486B-8A47-FA04814E502B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE8C2F86-2A28-486B-8A47-FA04814E502B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE8C2F86-2A28-486B-8A47-FA04814E502B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
