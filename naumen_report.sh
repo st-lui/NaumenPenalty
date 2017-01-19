@@ -36,10 +36,10 @@ w=0
 fi
 
 sleep 5
-rm -f ${file1}_rep_1
-rm -f ${file1}_rep_2
-rm -f ${file1}_rep_11
-rm -f ${file1}_rep_22
+#rm -f ${file1}_rep_1
+#rm -f ${file1}_rep_2
+#rm -f ${file1}_rep_11
+#rm -f ${file1}_rep_22
 
 done
 
