@@ -14,7 +14,11 @@ namespace NancyAspNetHostWithRazor1.Modules
 	{
 		string fileId;
 		string resultText;
-		static Tuple<bool,string> DownloadString(string url)
+		Dictionary<byte, Tuple<string, string>> passkeys = new Dictionary<byte, Tuple<string, string>> {
+			{ 67, new Tuple<string, string>("166470ff-beb7-48a3-b2a8-540d1b7c26dc", "Алтайский край") },
+			{ 56, new Tuple<string, string>("b2e9acf7-09cb-4e72-8d66-588cbcfd8a30", "Республика Хакасия") } };
+
+		static Tuple<bool, string> DownloadString(string url)
 		{
 			try
 			{
@@ -22,7 +26,7 @@ namespace NancyAspNetHostWithRazor1.Modules
 				{
 					var data = webClient.DownloadString(url);
 					data = data.Replace("\"", @"""");
-					return new Tuple<bool, string>(true,data);
+					return new Tuple<bool, string>(true, data);
 				}
 			}
 			catch (Exception e)
@@ -49,7 +53,7 @@ namespace NancyAspNetHostWithRazor1.Modules
 			return null;
 		}
 
-		Tuple<bool,string> CheckReportIsReady(string url)
+		Tuple<bool, string> CheckReportIsReady(string url)
 		{
 			var reportCheck = DownloadString(url);
 			if (reportCheck.Item1 == false)
@@ -69,7 +73,7 @@ namespace NancyAspNetHostWithRazor1.Modules
 				return new Tuple<bool, string>(false, "Ошибка. Не удалось запросить файл отчета.");
 			}
 			if (files.Length == 0)
-				return new Tuple<bool, string>(false,null);
+				return new Tuple<bool, string>(false, null);
 			fileId = null;
 			try
 			{
@@ -81,9 +85,9 @@ namespace NancyAspNetHostWithRazor1.Modules
 				return new Tuple<bool, string>(false, null);
 			}
 			if (string.IsNullOrEmpty(fileId))
-				return new Tuple<bool, string>(false,null);
+				return new Tuple<bool, string>(false, null);
 			fileId = fileId.Split('$')[1];
-			return new Tuple<bool, string>(true,fileId);
+			return new Tuple<bool, string>(true, fileId);
 		}
 
 		public Tuple<bool, string> GetPenalty(string passkey, string period)
@@ -96,11 +100,11 @@ namespace NancyAspNetHostWithRazor1.Modules
 				DateTime.DaysInMonth(currentPeriodYear, currentPeriodMonth)).AddDays(1).AddSeconds(-1);
 			string filename = String.Format("report({0:yyyy-MM-dd HH_mm_ss}).xlsx", DateTime.Now);
 			string reportRequestUrl =
-				//$"https://support.russianpost.ru/sd/services/rest/create-m2m/report%24rep5167/?accessKey={passkey}";
+			//$"https://support.russianpost.ru/sd/services/rest/create-m2m/report%24rep5167/?accessKey={passkey}";
 			$"https://support.russianpost.ru/sd/services/rest/create-m2m/report%24rep5167/%7BcheckInTime:%22{periodStart:yyyy.MM.dd}%20{periodStart:HH:mm}%22,periodDate:%22{periodFinish:yyyy.MM.dd}%20{periodFinish:HH:mm}%22%7D?accessKey={passkey}";
 
 			var data = DownloadString(reportRequestUrl);
-			if (!data.Item1 )
+			if (!data.Item1)
 			{
 				return new Tuple<bool, string>(false, "Ошибка. Не удалось запросить формирование отчета.");
 				//DownloadLinkLabel.Text = "Ошибка. Не удалось запросить формирование отчета. Подробности в логах";
@@ -145,7 +149,7 @@ namespace NancyAspNetHostWithRazor1.Modules
 			{
 				string getFileUrl = $"https://support.russianpost.ru/sd/services/rest/get-file/file%24{fileId}?accessKey={passkey}";
 				byte[] excelData = DownloadData(getFileUrl);
-				File.WriteAllBytes(HttpContext.Current.Server.MapPath("~/Storage/Reports/"+filename),excelData);
+				File.WriteAllBytes(HttpContext.Current.Server.MapPath("~/Storage/Reports/" + filename), excelData);
 				return new Tuple<bool, string>(true, "get-file/" + filename);
 			}
 			else
@@ -182,26 +186,42 @@ namespace NancyAspNetHostWithRazor1.Modules
 				if (todayDate.Day >= 1 && todayDate.Day <= DateTime.DaysInMonth(todayDate.Year, todayDate.Month) / 2)
 					selectedIndex--;
 				monthList[selectedIndex].Selected = true;
-				return View["index",new {list= monthList}];
+				IPAddress clientIpAddress = IPAddress.Parse(Request.UserHostAddress);
+				var ipBytes = clientIpAddress.GetAddressBytes();
+				Tuple<string,string> model = null;
+				if (passkeys.ContainsKey(ipBytes[1]))
+					model = passkeys[ipBytes[1]];
+				if (model!=null)
+					return View["index", new { list = monthList, passkey=model.Item1,regionName=model.Item2 }];
+				else
+					return View["index", new { list = monthList, passkey = "", regionName = ""}];
 			};
 			Post["/"] = p =>
 			{
 				string passkey = Request.Form["passkey"];
-				string period= Request.Form["period"];
+				string period = Request.Form["period"];
 				var penaltyResult = GetPenalty(passkey, period);
-				return Response.AsJson(new { result = penaltyResult.Item1,resultText=penaltyResult.Item2 });
+				return Response.AsJson(new { result = penaltyResult.Item1, resultText = penaltyResult.Item2 });
 			};
 			Get["/get-file/{filename}"] = p =>
 			{
 				string realFilename = HttpContext.Current.Server.MapPath($"~/Storage/Reports/{p.filename}");
 				if (File.Exists(realFilename))
-					return new GenericFileResponse($"/storage/reports/{p.filename}", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-				
+					return Response.AsFile($"Storage/reports/{p.filename}", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+
 				return new HttpNotFoundResult();
 			};
 			Get["/Views/index.cshtml"] = p =>
 			{
 				return Response.AsRedirect("/");
+			};
+			Get["/views/get.cshtml"] = p =>
+			{
+				return View["get", null];
+			};
+			Post["/views/get.cshtml"] = p =>
+			{
+				return Response.AsFile("Storage/site.css", "text/plain");
 			};
 		}
 	}

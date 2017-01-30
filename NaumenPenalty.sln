@@ -5,6 +5,8 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NaumenPenalty", "NaumenPenalty\NaumenPenalty.csproj", "{DAC9001D-6031-464C-9091-64964F284E29}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NancyAspNetHostWithRazor1", "NancyAspNetHostWithRazor1\NancyAspNetHostWithRazor1.csproj", "{B4F9C525-5C56-440E-B4C2-972A33D7C8CD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{DAC9001D-6031-464C-9091-64964F284E29}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DAC9001D-6031-464C-9091-64964F284E29}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DAC9001D-6031-464C-9091-64964F284E29}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B4F9C525-5C56-440E-B4C2-972A33D7C8CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B4F9C525-5C56-440E-B4C2-972A33D7C8CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B4F9C525-5C56-440E-B4C2-972A33D7C8CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B4F9C525-5C56-440E-B4C2-972A33D7C8CD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

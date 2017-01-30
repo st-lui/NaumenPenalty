@@ -1,0 +1,26 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" type="text/css" href="~/Content/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="~/Content/jquery-ui.css" />
+    <link rel="stylesheet" type="text/css" href="~/Content/site.css" />
+    <script src="~/Content/jquery-1.12.4.min.js" language="javascript"></script>
+    <script src="~/Content/jquery-ui.min.js" language="javascript"></script>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge;chrome=1" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>@ViewBag.Title</title>
+</head>
+<body>
+    <div class="container body-content">
+        @RenderBody()
+        <footer>
+            <div class="navbar navbar-static-bottom">
+                © @DateTime.Today.Year УФПС Алтайского края - филиал ФГУП "Почта россии"
+            </div>
+        </footer>
+    </div>
+
+</body>
+</html>

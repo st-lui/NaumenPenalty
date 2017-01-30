@@ -1,0 +1,72 @@
+﻿@using System.Collections.Generic
+@{
+    ViewBag.Title = "Выгрузка штрафов";
+    Layout = "_Layout.cshtml";
+}
+
+<div class="row">
+    <h2>Расчет штрафных санкций</h2>
+</div>
+<div class="row">
+    <div class="well col-md-6">
+        <form>
+            <div class="form-group">
+                <label for="" class="control-label">Выбор текущего периода для расчета штрафов</label>
+                <br>
+                <select name="period" id="period" size="1">
+                    @if (((IDictionary<string, object>)Model).ContainsKey("list"))
+                    {
+                        @foreach (var item in Model.list)
+                        {
+                            @if (item.Selected)
+                            {
+                                <option value="@item.Value" selected>@item.Text</option>
+}
+                            else
+                            {
+                                <option value="@item.Value"> @item.Text </option>
+}
+                        }
+                    }
+                </select>
+            </div>
+            <input type="hidden" id="passkey" name="passkey" value="b2e9acf7-09cb-4e72-8d66-588cbcfd8a30" />
+            <div class="form-group">
+                <button id="submit_button" type="button" class="btn btn-primary btn-sm">Генерировать отчет</button>
+                <span id="spinner"><img src="~/Content/small_spinner.gif"/></span>
+            </div>
+            <div class="form-group">
+                <div id="result">
+                    <label id="label_error_text" class="label-warning"></label>
+                    <a href="#" id="link_report">Скачать отчет</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $("#label_error_text").hide();
+        $("#link_report").hide();
+        $("#spinner").hide();
+        $("#submit_button").click(function () {
+            $("#spinner").show();
+            $jsXHRObject = $.ajax({
+                url: "/",
+                type: "post",
+                dataType: "json",
+                async: "false",
+                data: { period: $("#period").val(), passkey: $("#passkey").val() }
+            }).done(function (data) {
+                $("#spinner").hide();
+                if (data.result == true) {
+                    $("#link_report").attr("href", data.resultText);
+                    $("#link_report").show();
+                } else {
+                    $("#label_error_text").text(data.resultText);
+                    $("#label_error_text").show();
+                }
+            });
+        });
+    });
+</script>
