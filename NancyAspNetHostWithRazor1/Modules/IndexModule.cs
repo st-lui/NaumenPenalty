@@ -149,6 +149,8 @@ namespace NancyAspNetHostWithRazor1.Modules
 			{
 				string getFileUrl = $"https://support.russianpost.ru/sd/services/rest/get-file/file%24{fileId}?accessKey={passkey}";
 				byte[] excelData = DownloadData(getFileUrl);
+				if (!Directory.Exists(HttpContext.Current.Server.MapPath("~/Storage/Reports/")))
+					Directory.CreateDirectory(HttpContext.Current.Server.MapPath("~/Storage/Reports/"));
 				File.WriteAllBytes(HttpContext.Current.Server.MapPath("~/Storage/Reports/" + filename), excelData);
 				return new Tuple<bool, string>(true, "get-file/" + filename);
 			}
