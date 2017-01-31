@@ -65,6 +65,7 @@
         $("#spinner").hide();
         $("#submit_button").click(function () {
             $("#spinner").show();
+            $("#label_error_text").hide();
             $jsXHRObject = $.ajax({
                 url: "",
                 type: "post",
