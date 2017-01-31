@@ -15,8 +15,8 @@ namespace NancyAspNetHostWithRazor1.Modules
 		string fileId;
 		string resultText;
 		Dictionary<byte, Tuple<string, string>> passkeys = new Dictionary<byte, Tuple<string, string>> {
-			{ 67, new Tuple<string, string>("166470ff-beb7-48a3-b2a8-540d1b7c26dc", "Алтайский край") },
-			{ 56, new Tuple<string, string>("b2e9acf7-09cb-4e72-8d66-588cbcfd8a30", "Республика Хакасия") } };
+			{ 56, new Tuple<string, string>("166470ff-beb7-48a3-b2a8-540d1b7c26dc", "Алтайский край") },
+			{ 67, new Tuple<string, string>("b2e9acf7-09cb-4e72-8d66-588cbcfd8a30", "Республика Хакасия") } };
 
 		static Tuple<bool, string> DownloadString(string url)
 		{
@@ -90,6 +90,11 @@ namespace NancyAspNetHostWithRazor1.Modules
 			return new Tuple<bool, string>(true, fileId);
 		}
 
+		public void ModifyNaumenReport(string fileName)
+		{
+			
+		}
+
 		public Tuple<bool, string> GetPenalty(string passkey, string period)
 		{
 			DateTime currentPeriod = DateTime.Parse(period);
@@ -149,8 +154,11 @@ namespace NancyAspNetHostWithRazor1.Modules
 			{
 				string getFileUrl = $"https://support.russianpost.ru/sd/services/rest/get-file/file%24{fileId}?accessKey={passkey}";
 				byte[] excelData = DownloadData(getFileUrl);
+				if (!Directory.Exists(HttpContext.Current.Server.MapPath("~/Storage/Reports/")))
+					Directory.CreateDirectory(HttpContext.Current.Server.MapPath("~/Storage/Reports/"));
 				File.WriteAllBytes(HttpContext.Current.Server.MapPath("~/Storage/Reports/" + filename), excelData);
-				return new Tuple<bool, string>(true, "get-file/" + filename);
+				var serverRoot = HttpContext .Current.Request.Url.AbsoluteUri.Replace(HttpContext.Current.Request.Url.PathAndQuery, "");
+				return new Tuple<bool, string>(true, "naumen/get-file/" + filename);
 			}
 			else
 			{

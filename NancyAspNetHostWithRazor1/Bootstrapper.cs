@@ -12,6 +12,7 @@ namespace NancyAspNetHostWithRazor1
 		{
 			nancyConventions.StaticContentsConventions.Add(StaticContentConventionBuilder.AddDirectory("Storage",@"/Storage/Reports"));
 			base.ConfigureConventions(nancyConventions);
+			StaticConfiguration.DisableErrorTraces = false;
 		}
 	}
 }
