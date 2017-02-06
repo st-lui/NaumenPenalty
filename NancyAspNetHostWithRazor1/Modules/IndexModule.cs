@@ -282,7 +282,7 @@ namespace NancyAspNetHostWithRazor1.Modules
 					Directory.CreateDirectory(HttpContext.Current.Server.MapPath("~/Storage/Reports/"));
 				File.WriteAllBytes(HttpContext.Current.Server.MapPath("~/Storage/Reports/" + filename), excelData);
 				var serverRoot = HttpContext.Current.Request.Url.AbsoluteUri.Replace(HttpContext.Current.Request.Url.PathAndQuery, "");
-				return new Tuple<bool, string>(true, "get-file/" + filename);
+				return new Tuple<bool, string>(true, filename);
 			}
 			else
 			{
@@ -328,17 +328,30 @@ namespace NancyAspNetHostWithRazor1.Modules
 					if (item.IpSecondByte == ipBytes[1])
 						rm = item;
 				}
-				if (rm!= null)
-					return View["index", new { list = monthList, passkey = rm.Passkey, regionName = rm.Name }];
-				else
-					return View["index", new { list = monthList, passkey = "", regionName = "" }];
+				if (rm==null)
+					rm=new RegionModel() {Name=null};
+				return View["index", new { list = monthList, regionModel=rm }];
 			};
 			Post["/"] = p =>
 			{
 				string passkey = Request.Form["passkey"];
 				string period = Request.Form["period"];
+				double equip = Request.Form["equip"];
+				double regional = Request.Form["regional"];
 				var penaltyResult = GetPenalty(passkey, period);
-				return Response.AsJson(new { result = penaltyResult.Item1, resultText = penaltyResult.Item2 });
+				if (penaltyResult.Item1)
+				{
+					PenaltyModel penaltyModel = new PenaltyModel()
+					{
+						RegionName = passkey,
+						RegionCoeff = regional,
+						EquipCoeff = equip
+					};
+					string modFilename = ModifyNaumenReport(HttpContext.Current.Server.MapPath("~/Storage/Reports/" + penaltyResult.Item2), penaltyModel);
+					return Response.AsJson(new { result = penaltyResult.Item1, resultText = modFilename });
+				}
+				else
+					return Response.AsJson(new { result = penaltyResult.Item1, resultText = penaltyResult.Item2 });
 			};
 			Get["/get-file/{filename}"] = p =>
 			{
