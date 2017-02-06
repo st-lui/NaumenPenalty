@@ -12,7 +12,7 @@ using Nancy.Responses;
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
 using NPOI.XSSF.UserModel;
-
+using OfficeOpenXml;
 namespace NancyAspNetHostWithRazor1.Modules
 {
 	public class IndexModule : NancyModule
@@ -160,9 +160,26 @@ namespace NancyAspNetHostWithRazor1.Modules
 				}
 				int lastRow = activeSheet.LastRowNum;
 				int lastColumn = activeSheet.GetRow(lastRow).LastCellNum;
+				string summFirst = CellReference.ConvertNumToColString(penaltyColumnIndex) + (dataStartRow + 1);
+				string summLast = CellReference.ConvertNumToColString(penaltyColumnIndex) + (lastRow);
+				currentRow = activeSheet.GetRow(3);
+				var doubleCellStyle = workbook.CreateCellStyle();
+				doubleCellStyle.DataFormat = doubleFormat;
+				var penaltyCell = currentRow.CreateCell(2);
+				penaltyCell.CellStyle=doubleCellStyle;
+				penaltyCell.SetCellFormula("SUM(" + summFirst + ":" + summLast + ")");
+				
+				
+				MemoryStream ms = new MemoryStream();
+				workbook.Write(ms);
+
+				ExcelPackage ep = new ExcelPackage(ms);
+				ep.Workbook.Worksheets[1].Drawings[0].SetPosition(lastRow, 0,lastColumn+1,0);
+				ep.Workbook.Worksheets[1].Drawings[0].SetSize(113);
+
 				using (FileStream fileStreamMod = new FileStream(Path.Combine(path, modeFilename), FileMode.Create))
 				{
-					workbook.Write(fileStreamMod);
+					ep.SaveAs(fileStreamMod);
 				}
 				workbook.Close();
 				return modeFilename;
