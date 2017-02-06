@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<ArrayOfRegionModel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <RegionModel>
+    <IpSecondByte>56</IpSecondByte>
+    <Passkey>166470ff-beb7-48a3-b2a8-540d1b7c26dc</Passkey>
+    <Name>Алтайский край</Name>
+    <RegionalCoeff>0.97</RegionalCoeff>
+    <EquipmentCoeff>0.9904</EquipmentCoeff>
+  </RegionModel>
+    <RegionModel>
+    <IpSecondByte>67</IpSecondByte>
+    <Passkey>b2e9acf7-09cb-4e72-8d66-588cbcfd8a30</Passkey>
+    <Name>Республика Хакасия</Name>
+    <RegionalCoeff>0.74</RegionalCoeff>
+    <EquipmentCoeff>0.5624</EquipmentCoeff>
+  </RegionModel>
+</ArrayOfRegionModel>

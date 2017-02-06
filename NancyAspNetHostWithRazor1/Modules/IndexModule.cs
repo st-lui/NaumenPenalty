@@ -320,11 +320,16 @@ namespace NancyAspNetHostWithRazor1.Modules
 				monthList[selectedIndex].Selected = true;
 				IPAddress clientIpAddress = IPAddress.Parse(Request.UserHostAddress);
 				var ipBytes = clientIpAddress.GetAddressBytes();
-				Tuple<string, string> model = null;
-				if (passkeys.ContainsKey(ipBytes[1]))
-					model = passkeys[ipBytes[1]];
-				if (model != null)
-					return View["index", new { list = monthList, passkey = model.Item1, regionName = model.Item2 }];
+				RegionsModel regionsModel = new RegionsModel();
+				regionsModel.Deserialize(HttpContext.Current.Server.MapPath("~/regions.xml"));
+				RegionModel rm = null;
+				foreach (RegionModel item in regionsModel.RegionModels)
+				{
+					if (item.IpSecondByte == ipBytes[1])
+						rm = item;
+				}
+				if (rm!= null)
+					return View["index", new { list = monthList, passkey = rm.Passkey, regionName = rm.Name }];
 				else
 					return View["index", new { list = monthList, passkey = "", regionName = "" }];
 			};

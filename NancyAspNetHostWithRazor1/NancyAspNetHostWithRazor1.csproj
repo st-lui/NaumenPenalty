@@ -141,6 +141,7 @@
     <Compile Include="Modules\IndexModule.cs" />
     <Compile Include="Modules\MyLogger.cs" />
     <Compile Include="Modules\PenaltyModel.cs" />
+    <Compile Include="Modules\RegionModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
