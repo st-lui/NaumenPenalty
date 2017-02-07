@@ -191,9 +191,9 @@ namespace NancyAspNetHostWithRazor1.Modules
 		{
 			Dictionary<int, string> prices = new Dictionary<int, string>
 			{
-				{ 101,"203300"},{ 102,"66300"},{ 103,"49100"},{ 104,"35000"},
-							{ 11,"58650"},{ 12,"30100"},{ 13,"17900"},{ 14,"11700"},{ 15,"34910"},
-							{ 1,"66950"},{ 2,"44990"},{ 3,"13640"},{ 4,"5130"},{ 5,"3190"}
+				{ 101,"222000"},{ 102,"72440"},{ 103,"53640"},{ 104,"38280"},
+							{ 11,"65270"},{ 12,"33890"},{ 13,"20860"},{ 14,"13670"},{ 15,"34910"}, { 16,"83400"},
+							{ 1,"75830"},{ 2,"44990"},{ 3,"13640"},{ 4,"5130"},{ 5,"3190"}
 			};
 			int myOpsClass = 0;
 			if (int.TryParse(opsClass, out myOpsClass))
@@ -211,6 +211,11 @@ namespace NancyAspNetHostWithRazor1.Modules
 				if (regex.IsMatch(nameOps.ToLower()))
 				{
 					return prices[15];
+				}
+				regex = new Regex("магистрально\\W*сортировочный\\W+центр");
+				if (regex.IsMatch(nameOps.ToLower()))
+				{
+					return prices[16];
 				}
 				if (nameOps.ToLower().Contains("филиал"))
 					return prices[myOpsClass + 100];

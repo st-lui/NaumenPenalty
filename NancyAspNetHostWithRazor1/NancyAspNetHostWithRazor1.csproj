@@ -132,6 +132,7 @@
     <Content Include="Content\small_spinner.gif" />
     <Content Include="favicon.ico" />
     <Content Include="icon.png" />
+    <Content Include="regions.xml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
